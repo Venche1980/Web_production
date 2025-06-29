@@ -1,0 +1,261 @@
+{
+  "info": {
+    "name": "Тестирование прав доступа - дополнение",
+    "_postman_id": "security-tests-addon",
+    "description": "Дополнительные запросы для проверки безопасности",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Регистрация второго пользователя",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user2@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Создание объявления первым пользователем",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Email",
+            "value": "test@example.com"
+          },
+          {
+            "key": "User-Password",
+            "value": "mypass"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Квартира в центре\",\n  \"description\": \"2-х комнатная квартира, 50м²\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. ❌ Попытка редактирования чужого объявления (должна отказать)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Email",
+            "value": "user2@example.com",
+            "description": "Второй пользователь пытается редактировать объявление первого"
+          },
+          {
+            "key": "User-Password",
+            "value": "password123"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"ХАКНУЛ ОБЪЯВЛЕНИЕ!\",\n  \"description\": \"Злоумышленник пытается изменить чужое объявление\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements", "1"],
+          "query": [
+            {
+              "key": "note",
+              "value": "Ожидаем 403 Forbidden",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. ❌ Попытка удаления чужого объявления (должна отказать)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Email",
+            "value": "user2@example.com",
+            "description": "Второй пользователь пытается удалить объявление первого"
+          },
+          {
+            "key": "User-Password",
+            "value": "password123"
+          }
+        ],
+        "body": {
+          "mode": "none"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements", "1"],
+          "query": [
+            {
+              "key": "note",
+              "value": "Ожидаем 403 Forbidden",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. ✅ Успешное редактирование владельцем",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Email",
+            "value": "test@example.com",
+            "description": "Владелец редактирует своё объявление"
+          },
+          {
+            "key": "User-Password",
+            "value": "mypass"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Квартира в центре (обновлено)\",\n  \"description\": \"2-х комнатная квартира, 50м², ремонт\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements", "1"],
+          "query": [
+            {
+              "key": "note",
+              "value": "Ожидаем 200 OK",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. ❌ Попытка авторизации с неверным паролем",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Email",
+            "value": "test@example.com"
+          },
+          {
+            "key": "User-Password",
+            "value": "wrong_password",
+            "description": "Неверный пароль"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Попытка с неверным паролем\",\n  \"description\": \"Этот запрос должен быть отклонён\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements"],
+          "query": [
+            {
+              "key": "note",
+              "value": "Ожидаем 401 Unauthorized",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. ❌ Попытка авторизации с несуществующим email",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Email",
+            "value": "nonexistent@example.com",
+            "description": "Несуществующий пользователь"
+          },
+          {
+            "key": "User-Password",
+            "value": "anypassword"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Попытка с несуществующим email\",\n  \"description\": \"Этот запрос должен быть отклонён\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements"],
+          "query": [
+            {
+              "key": "note",
+              "value": "Ожидаем 401 Unauthorized",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

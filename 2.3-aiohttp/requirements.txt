@@ -1,0 +1,4 @@
+aiohttp==3.10.11
+asyncpg==0.29.0
+nest-asyncio==1.6.0
+Werkzeug==3.0.4
