@@ -1,0 +1,143 @@
+{
+  "info": {
+    "name": "Aiohttp Advertisement API",
+    "_postman_id": "aiohttp-advertisement-api",
+    "description": "Тестирование всех эндпоинтов API на aiohttp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json "
+  },
+  "item": [
+    {
+      "name": "Регистрация пользователя",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"mypass\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Создание объявления",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Email",
+            "value": "test@example.com"
+          },
+          {
+            "key": "User-Password",
+            "value": "mypass"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Продаю машину\",\n  \"description\": \"BMW X5, хорошее состояние\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение объявления (ID=1)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "none"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Обновление объявления (ID=1)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Email",
+            "value": "test@example.com"
+          },
+          {
+            "key": "User-Password",
+            "value": "mypass"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Продаю BMW\",\n  \"description\": \"BMW X5, 2020 г., хорошее состояние\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление объявления (ID=1)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Email",
+            "value": "test@example.com"
+          },
+          {
+            "key": "User-Password",
+            "value": "mypass"
+          }
+        ],
+        "body": {
+          "mode": "none"
+        },
+        "url": {
+          "raw": "http://localhost:8080/advertisements/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["advertisements", "1"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
